@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 	fclose(file);
 	fp = fopen(filename,"r");
 
-	//检查下载的文件是否可用
+	// Check if the file is valid
 	if (fp == NULL) {
 		printf("Open File Error\n");
 		return -1;
@@ -161,11 +161,11 @@ int main(int argc, char *argv[])
 
 	if(fseek(fp, START_PRT, SEEK_SET) != 0)return -1;
 
-	//找到真正的文件头：0x0a之后的byte
+	// Find the beginning of the head: the byte after 0x0a
 	while(btc_uint1(fp) != 0x0a) {
 		fseek(fp, -2, SEEK_CUR);
 	}
-	//准备就绪，可以开始解析
+	//Ready for parsing
 	printf("\n Preparation Done. Start to parse:\n-----------------\n");
 
 	
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 	char *txo_sc_pbk;
 	script_pbk *txo_parsed_sc_pbk;
 
-	// 解析区块头
+	// Parse the header
 	uint32_t curr_blk_version;
 	uint32_t curr_blk_time;
 	uint32_t n_bits;
@@ -207,13 +207,13 @@ int main(int argc, char *argv[])
 	printf("nBits (Difficulty Target): %u\n", n_bits);
 	printf("Nonce: %u\n", nonce);
 
-	//交易数量
+	//Parse the number of transctions
 	uint64_t tx_count;
 	tx_count = btc_varint(fp);
 	printf("Transaction Count: %lld\n", tx_count);
 	printf("---------------------------------------------\n");
 
-	//前5交易
+	//Parse the top 5 transcations of the block
 	int k;
 	int j = 1;
 	if(tx_count > 5) {
